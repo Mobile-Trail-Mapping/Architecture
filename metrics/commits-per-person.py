@@ -8,7 +8,10 @@ authorNames = { "lithium3141":"Tim Ekl",
                 "fernferret":"Eric Stokes",
                 "davidpick":"David Pick",
                 "brousalis":"Pete Brousalis" }
-commitCounts = {}
+commitCounts = { "lithium3141":0,
+                 "fernferret":0,
+                 "davidpick":0,
+                 "brousalis":0 }
 
 # Markdown header
 print("<table>")
@@ -31,13 +34,16 @@ for repoName in repoNames:
         if author2:
             commitCount += len(author2.commits)
         print("<td>{0}</td>".format(commitCount),end="")
-        commitCounts[username] = commitCount
+        commitCounts[username] += commitCount
     
     # Markdown row ending
     print("</tr>")
 
 # Markdown totals
-print("<tr><td><i>Total</i></td><td>{0}</td></tr>".format("</td><td>".join([str(commitCounts[username]) for username in authorNames])))
+print("<tr><td><i>Total (%)</i></td>", end="")
+for username in authorNames:
+    print("<td>{0} ({1:.0f}%)".format(str(commitCounts[username]), 100 * commitCounts[username] / sum(commitCounts[u] for u in authorNames)), end="")
+print("</tr>")
 
 # Markdown footer
 print("</table>")
