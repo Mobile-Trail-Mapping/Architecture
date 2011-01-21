@@ -6,6 +6,9 @@ BUILD_DIR=~/MTMNightly
 ANDROID_PROJECT_DIR=/Android
 REPO_EXISTS_FOLDER=/.git
 
+KEYSTORE_DIR=.
+SECURE_PROP_DIR=.
+
 GIT_REPO=git://github.com/Mobile-Trail-Mapping/Android.git
 GIT_BRANCH=advanced-build
 
@@ -20,10 +23,10 @@ else
   git clone --branch $GIT_BRANCH $GIT_REPO "${BUILD_DIR}"
   
   echo "Adding secure.properties"
-  cp secure.properties $BUILD_DIR
+  cp "${SECURE_PROP_DIR}/secure.properties" $BUILD_DIR
   
   echo "Adding brousalis.keystore"
-  cp brousalis.keystore $BUILD_DIR
+  cp "${KEYSTORE_DIR}/brousalis.keystore" $BUILD_DIR
   
   cd $BUILD_DIR
 fi
