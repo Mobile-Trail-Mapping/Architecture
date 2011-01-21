@@ -2,9 +2,12 @@
 # Android Nightly Build Script
 
 # Params
-BUILD_DIR=~/MTMNightly/
-REPO_EXISTS_FOLDER=.git/
+BUILD_DIR=~/MTMNightly
+ANDROID_PROJECT_DIR=/Android
+REPO_EXISTS_FOLDER=/.git
+
 GIT_REPO=git://github.com/Mobile-Trail-Mapping/Android.git
+GIT_BRANCH=advanced-build
 
 # Pull the latest changes from the Android master branch
 if [ -d "${BUILD_DIR}${REPO_EXISTS_FOLDER}" ]; then
@@ -14,5 +17,17 @@ if [ -d "${BUILD_DIR}${REPO_EXISTS_FOLDER}" ]; then
   git pull
 else
   echo "No Repo found, cloning..."
-  git clone $GIT_REPO "${BUILD_DIR}"
+  git clone --branch $GIT_BRANCH $GIT_REPO "${BUILD_DIR}"
+  
+  echo "Adding secure.properties"
+  cp secure.properties $BUILD_DIR
+  
+  echo "Adding brousalis.keystore"
+  cp brousalis.keystore $BUILD_DIR
+  
+  cd $BUILD_DIR
 fi
+
+echo "Building Android"
+
+ls "${PWD}${ANDROID_PROJECT_DIR}"
