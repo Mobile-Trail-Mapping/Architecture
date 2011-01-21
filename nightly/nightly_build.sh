@@ -14,5 +14,5 @@ if [ -d "${BUILD_DIR}${REPO_EXISTS_FOLDER}" ]; then
   git pull
 else
   echo "No Repo found, cloning..."
-  git clone $GIT_REPO "${BUILD_DIR}${REPO_DIR}"
+  git clone $GIT_REPO "${BUILD_DIR}"
 fi
