@@ -10,8 +10,12 @@ REPO_EXISTS_FOLDER=/.git
 KEYSTORE_DIR=.
 SECURE_PROP_DIR=.
 
+UPLOAD_PASSWORD_FILE=password.txt
+
 GIT_REPO=git://github.com/Mobile-Trail-Mapping/Android.git
 GIT_BRANCH=advanced-build
+
+read -r PASSWORD < "password.txt"
 
 PATH_TO_ME=$PWD
 # Pull the latest changes from the Android master branch
@@ -52,3 +56,12 @@ cd $ANDROID_DIR
 echo $ANDROID_DIR
 android update project --path .
 ant release
+ls "${ANDROID_DIR}"
+echo "Attempting to upload."
+scp "${ANDROID_DIR}/bin/ShowMap-release.apk" "fernferr@eric-stokes.com:public_html/mtm/nightly/builds/MTMBeta_Nightly.TEST.apk"
+SUCCESS=$?
+if [ $SUCCESS ]; then
+    echo "Upload COMPLETE."
+else
+    echo "Could NOT upload."
+fi
