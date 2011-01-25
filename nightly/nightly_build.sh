@@ -46,7 +46,9 @@ fi
   ls
   for build in ${partsArray[@]}
   do
-    echo "Cloning Android branch ${build}..."
+    echo "*************************************"
+    echo "* Cloning Android branch ${build}..."
+    echo "*************************************"
     if [ -d "${BUILD_DIR}${REPO_EXISTS_FOLDER}" ]; then
       echo "The build dir exists, refreshing..."
       rm -rf "${BUILD_DIR}"
@@ -54,6 +56,40 @@ fi
     fi
     git clone --branch $build $GIT_REPO "${BUILD_DIR}"
     echo ""
+    cd $PATH_TO_ME
+    echo "Adding secure.properties..."
+    cp "${SECURE_PROP_DIR}/secure.properties" "${ANDROID_DIR}/secure.properties"
+
+    echo "Adding brousalis.keystore..."
+    cp "${SECURE_PROP_DIR}/brousalis.keystore" "${ANDROID_DIR}/brousalis.keystore"
+
+    echo "Adding secret XML file..."
+    cp "${SECURE_PROP_DIR}/secret.xml" "${ANDROID_DIR}/res/values/secret.xml"
+    
+    cd $ANDROID_DIR
+    echo "******************************************"
+    echo "* Attempting to build android project... *"
+    echo "******************************************"
+    android update project --path .
+    ant release
+    echo "*********************************************"
+    echo "* Attempting to upload to nightly server... *"
+    echo "*********************************************"
+    scp "${ANDROID_DIR}/bin/ShowMap-release.apk" "fernferr@eric-stokes.com:public_html/mtm/nightly/builds/MTMBeta_${build}.apk"
+    FAIL=$?
+    if [ $FAIL ]; then
+      echo "***********************"
+      echo "*       FAILURE       *"
+      echo "* Build NOT Successful*"
+      echo "***********************"
+    else
+      echo "***************"
+      echo "*   SUCCESS   *"
+      echo "***************"
+    fi
+    echo
+    echo
+    echo
   done
   exit
   ls
@@ -64,11 +100,7 @@ fi
   echo ""
   
   cd $PATH_TO_ME
-  ls
   echo "Adding secure.properties"
-  ls
-  echo $PATH_TO_ME
-  echo $SECURE_PROP_DIR
   cp "${SECURE_PROP_DIR}/secure.properties" "${ANDROID_DIR}/secure.properties"
   
   echo "Adding brousalis.keystore"
