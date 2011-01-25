@@ -29,23 +29,21 @@ fi
 #  read -r BRANCHES < temp-branches.txt
   #BRANCHES=( "fish" "dog" "bear" )
   echo ""
-  declare -a partsArray
-  git branch -r | while read line; do
-      echo $line | tr "/" " "
-      parts=(`echo $line | tr "/" " "`)
-      echo ${parts[1]}
-      echo ""
-      if [ ${parts[1]} != "HEAD" ] && [ ${parts[1]} != "master" ]; then
-        partsArray=( "${partsArray[*]}" "${parts[1]}" )
-      fi
-      echo ${partsArray[@]}
-      
-  done
-  echo ""
-  
+  testvar=`git branch -r`
   echo "Printing Array:"
-  echo ${partsArray[@]}
-  
+  echo ${testvar}
+  echo "Retrieving Branches:"
+  for name in ${testvar[@]}
+  do
+    acutal=(`echo $name | tr "/" " "`)
+    branchname=${acutal[1]}
+    if [ $branchname != "master" ] && [ $branchname != "HEAD" ]; then
+      partsArray=( "${partsArray[*]}" "${branchname}" )
+      echo "BRANCH: ${branchname}."
+    fi
+  done
+  echo "Final Array"
+  echo "${partsArray[@]}"
   # for name in ${parts[@]}
   # do
   # echo "Value: ${name}"
