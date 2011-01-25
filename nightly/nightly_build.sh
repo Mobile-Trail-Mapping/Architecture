@@ -29,17 +29,22 @@ fi
 #  read -r BRANCHES < temp-branches.txt
   #BRANCHES=( "fish" "dog" "bear" )
   echo ""
-  declare -a parts
+  declare -a partsArray
   git branch -r | while read line; do
       echo $line | tr "/" " "
       parts=(`echo $line | tr "/" " "`)
       echo ${parts[1]}
       echo ""
+      if [ ${parts[1]} != "HEAD" ] && [ ${parts[1]} != "master" ]; then
+        partsArray=( "${partsArray[*]}" "${parts[1]}" )
+      fi
+      echo ${partsArray[@]}
+      
   done
   echo ""
   
   echo "Printing Array:"
-  echo ${parts[*]}
+  echo ${partsArray[@]}
   
   # for name in ${parts[@]}
   # do
