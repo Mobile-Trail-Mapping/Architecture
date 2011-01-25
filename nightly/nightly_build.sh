@@ -9,12 +9,10 @@ REPO_EXISTS_FOLDER=/.git
 
 SECURE_PROP_DIR=.
 
-UPLOAD_PASSWORD_FILE=password.txt
 
 GIT_REPO=git://github.com/Mobile-Trail-Mapping/Android.git
-GIT_BRANCH=advanced-build
-
-read -r PASSWORD < "password.txt"
+# This is only the starting branch, all branches will be built
+GIT_BRANCH=master
 
 PATH_TO_ME=$PWD
 git branch
@@ -23,7 +21,7 @@ if [ -d "${BUILD_DIR}${REPO_EXISTS_FOLDER}" ]; then
   rm -rf "${BUILD_DIR}"
   mkdir "${BUILD_DIR}"
 fi
-  echo "No Repo found, cloning..."
+  echo "Cloning Android branch ${GIT_BRANCH}..."
   git clone --branch $GIT_BRANCH $GIT_REPO "${BUILD_DIR}"
   cd $BUILD_DIR
 #  read -r BRANCHES < temp-branches.txt
@@ -42,8 +40,23 @@ fi
       echo "BRANCH: ${branchname}."
     fi
   done
-  echo "Final Array"
-  echo "${partsArray[@]}"
+  #echo "Final Array"
+  #echo "${partsArray[@]}"
+  cd $PATH_TO_ME
+  ls
+  for build in ${partsArray[@]}
+  do
+    echo "Cloning Android branch ${build}..."
+    if [ -d "${BUILD_DIR}${REPO_EXISTS_FOLDER}" ]; then
+      echo "The build dir exists, refreshing..."
+      rm -rf "${BUILD_DIR}"
+      mkdir "${BUILD_DIR}"
+    fi
+    git clone --branch $build $GIT_REPO "${BUILD_DIR}"
+    echo ""
+  done
+  exit
+  ls
   # for name in ${parts[@]}
   # do
   # echo "Value: ${name}"
@@ -51,7 +64,11 @@ fi
   echo ""
   
   cd $PATH_TO_ME
+  ls
   echo "Adding secure.properties"
+  ls
+  echo $PATH_TO_ME
+  echo $SECURE_PROP_DIR
   cp "${SECURE_PROP_DIR}/secure.properties" "${ANDROID_DIR}/secure.properties"
   
   echo "Adding brousalis.keystore"
