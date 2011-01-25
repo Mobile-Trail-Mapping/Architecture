@@ -82,7 +82,7 @@ fi
     echo "*********************************************"
     echo "* Attempting to upload to nightly server... *"
     echo "*********************************************"
-    scp "${ANDROID_DIR}/bin/ShowMap-release.apk" "fernferr@eric-stokes.com:public_html/mtm/nightly/builds/MTMBeta_${DATE}_${build}.apk"
+    scp "${ANDROID_DIR}/bin/ShowMap-release.apk" "brousali@brousalis.com:public_html/builds/android/MTMBeta_${DATE}_${build}.apk"
     FAIL=$?
     if [ ! $FAIL ]; then
       echo "***********************"
