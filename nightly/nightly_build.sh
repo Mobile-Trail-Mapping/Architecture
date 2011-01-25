@@ -29,6 +29,7 @@ fi
 #  read -r BRANCHES < temp-branches.txt
   #BRANCHES=( "fish" "dog" "bear" )
   echo ""
+  declare -a parts
   git branch -r | while read line; do
       echo $line | tr "/" " "
       parts=(`echo $line | tr "/" " "`)
@@ -36,6 +37,16 @@ fi
       echo ""
   done
   echo ""
+  
+  echo "Printing Array:"
+  echo ${parts[*]}
+  
+  # for name in ${parts[@]}
+  # do
+  # echo "Value: ${name}"
+  # done
+  echo ""
+  
   cd $PATH_TO_ME
   echo "Adding secure.properties"
   cp "${SECURE_PROP_DIR}/secure.properties" "${ANDROID_DIR}/secure.properties"
