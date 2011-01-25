@@ -12,9 +12,10 @@ SECURE_PROP_DIR=.
 
 GIT_REPO=git://github.com/Mobile-Trail-Mapping/Android.git
 # This is only the starting branch, all branches will be built
-GIT_BRANCH=master
+GIT_BRANCH=advanced-build
 
 PATH_TO_ME=$PWD
+DATE=`date "+%m-%d-%Y"`
 git branch
 # Pull the latest changes from the Android master branch
 if [ -d "${BUILD_DIR}${REPO_EXISTS_FOLDER}" ]; then
@@ -24,8 +25,7 @@ fi
   echo "Cloning Android branch ${GIT_BRANCH}..."
   git clone --branch $GIT_BRANCH $GIT_REPO "${BUILD_DIR}"
   cd $BUILD_DIR
-#  read -r BRANCHES < temp-branches.txt
-  #BRANCHES=( "fish" "dog" "bear" )
+
   echo ""
   testvar=`git branch -r`
   echo "Printing Array:"
@@ -43,19 +43,26 @@ fi
   #echo "Final Array"
   #echo "${partsArray[@]}"
   cd $PATH_TO_ME
+  partsArray=( "${partsArray[*]}" "master" )
   ls
   for build in ${partsArray[@]}
   do
     echo "*************************************"
     echo "* Cloning Android branch ${build}..."
+    pwd
     echo "*************************************"
     if [ -d "${BUILD_DIR}${REPO_EXISTS_FOLDER}" ]; then
       echo "The build dir exists, refreshing..."
+      ls
       rm -rf "${BUILD_DIR}"
+      ls
+      mkdir "${BUILD_DIR}"
+      ls
+    elif [ ! -d ${BUILD_DIR} ]; then
       mkdir "${BUILD_DIR}"
     fi
     git clone --branch $build $GIT_REPO "${BUILD_DIR}"
-    echo ""
+    echo "Git repo should have been cloned"
     cd $PATH_TO_ME
     echo "Adding secure.properties..."
     cp "${SECURE_PROP_DIR}/secure.properties" "${ANDROID_DIR}/secure.properties"
@@ -71,13 +78,13 @@ fi
     echo "* Attempting to build android project... *"
     echo "******************************************"
     android update project --path .
-    ant release
+    ant release -s
     echo "*********************************************"
     echo "* Attempting to upload to nightly server... *"
     echo "*********************************************"
-    scp "${ANDROID_DIR}/bin/ShowMap-release.apk" "fernferr@eric-stokes.com:public_html/mtm/nightly/builds/MTMBeta_${build}.apk"
+    scp "${ANDROID_DIR}/bin/ShowMap-release.apk" "fernferr@eric-stokes.com:public_html/mtm/nightly/builds/MTMBeta_${DATE}_${build}.apk"
     FAIL=$?
-    if [ $FAIL ]; then
+    if [ ! $FAIL ]; then
       echo "***********************"
       echo "*       FAILURE       *"
       echo "* Build NOT Successful*"
@@ -87,9 +94,11 @@ fi
       echo "*   SUCCESS   *"
       echo "***************"
     fi
+    cd $PATH_TO_ME
     echo
     echo
     echo
+    # read -p "Press any key to start backup…"
   done
   exit
   ls
