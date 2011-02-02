@@ -8,10 +8,9 @@ authorNames = { "lithium3141":"Tim Ekl",
                 "fernferret":"Eric Stokes",
                 "davidpick":"David Pick",
                 "brousalis":"Pete Brousalis" }
-commitCounts = { "lithium3141":0,
-                 "fernferret":0,
-                 "davidpick":0,
-                 "brousalis":0 }
+commitCounts = {}
+for username in authorNames:
+    commitCounts[username] = 0
 
 # Markdown header
 print("<table>")
