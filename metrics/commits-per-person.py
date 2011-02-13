@@ -3,7 +3,7 @@
 import logging
 import pygitlog
 
-repoNames = ["iPhone", "Architecture", "Architecture.wiki", "Android", "Server"]
+repoNames = ["iPhone", "Architecture", "Architecture.wiki", "Android", "Server", "Builds"]
 authorNames = { "lithium3141":"Tim Ekl",
                 "fernferret":"Eric Stokes",
                 "davidpick":"David Pick",

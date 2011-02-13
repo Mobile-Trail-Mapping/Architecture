@@ -4,7 +4,7 @@ import logging
 import os.path
 import pygitlog
 
-repoNames = ["iPhone", "Architecture", "Architecture.wiki", "Android", "Server"]
+repoNames = ["iPhone", "Architecture", "Architecture.wiki", "Android", "Server", "Builds"]
 commitCounts = {}
 
 REPOS_ROOT=os.path.abspath(os.path.expanduser("~/code/Mobile-Trail-Mapping"))

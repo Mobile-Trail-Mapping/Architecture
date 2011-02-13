@@ -20,18 +20,20 @@ if which("cloc") == "":
     print("Requires the `cloc` command from http://cloc.sourceforge.net/")
     quit()
 
-if not len(sys.argv) == 2:
-    print("Usage: {0} <repositories root>".format(sys.argv[0]))
+if not len(sys.argv) == 2 and not len(sys.argv) == 3:
+    print("Usage: {0} <repositories root> [exclude directories]".format(sys.argv[0]))
     quit()
 
 basePath = os.path.abspath(os.path.expanduser(sys.argv[1]))
+ignoreList = sys.argv[2]
 
-keys = ["android", "architecture", "architecture.wiki", "server", "iphone"]
+keys = ["android", "architecture", "architecture.wiki", "server", "iphone", "builds"]
 subdirs = { "android":"Android",
             "architecture":"Architecture", 
             "architecture.wiki":"Architecture.wiki",
             "server":"Server",
-            "iphone":"iPhone" }
+            "iphone":"iPhone",
+            "builds":"Builds" }
 stats = {}
 
 # Generate statistics for all repos
@@ -39,7 +41,10 @@ for key in keys:
     path = os.path.join(basePath, subdirs[key])
     
     # Get and preprocess output
-    clocLines = subprocess.getoutput("cloc {}".format(path)).split("\n")
+    cmdString = "cloc {0}".format(path)
+    if len(sys.argv) == 3:
+        cmdString = cmdString + " --exclude-dir={0}".format(ignoreList)
+    clocLines = subprocess.getoutput(cmdString).split("\n")
     sepCount = 0
     clocOutput = []
     for line in clocLines:
